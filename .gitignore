@@ -1,0 +1,6 @@
+.DS_Store
+.model/
+.venv/
+__pycache__/
+voice-profile.json
+Draftcheck.zip

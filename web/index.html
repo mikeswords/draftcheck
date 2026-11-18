@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Check the AI text signal of English writing and get feedback on your draft. Runs on your device.">
+  <meta name="theme-color" content="#f5f6f1">
+  <title>Draftcheck</title>
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="frame topbar-inner">
+      <a class="brand" href="/" aria-label="Draftcheck home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Draftcheck</span>
+      </a>
+      <div class="top-actions">
+        <span class="local"><span aria-hidden="true"></span> Runs locally</span>
+        <button class="guide-button" id="open-guide" type="button" hidden>Voice guide <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="frame">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Check your writing</h1>
+      <p>Paste English text to see its AI signal and get feedback on clarity and wording.</p>
+    </section>
+
+    <div class="workspace">
+      <form class="card editor" id="review-form" method="post">
+        <div class="card-head">
+          <h2><label for="draft">Your draft</label></h2>
+          <button type="button" class="plain" id="example-button">Load example</button>
+        </div>
+        <textarea id="draft" name="draft" maxlength="16000" placeholder="Paste your text here…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+        <div class="editor-meta">
+          <output id="word-count" for="draft">0 words</output>
+          <button type="button" class="plain" id="clear-button" disabled>Clear</button>
+        </div>
+        <div class="editor-footer">
+          <span class="keyboard-hint" aria-hidden="true"><kbd id="modifier">⌘</kbd><kbd>↵</kbd> to check</span>
+          <button class="primary" id="check-button" type="submit" disabled>Check draft <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+
+      <section class="card results" aria-labelledby="review-title">
+        <div class="card-head">
+          <h2 id="review-title">Review</h2>
+          <button type="button" class="plain copy-review" id="copy-review" hidden>Copy for ChatGPT</button>
+        </div>
+        <div class="result-body">
+          <section class="detector-section" aria-labelledby="signal-title">
+            <div class="section-label">
+              <h3 id="signal-title">AI text signal</h3>
+              <span class="model-tag">Ettin 68M</span>
+            </div>
+            <div id="score-wrap" class="score-wrap" data-signal="empty">
+              <div class="score-line">
+                <span class="score" id="score">···</span>
+                <span class="signal" id="signal">Awaiting draft</span>
+              </div>
+              <progress id="score-meter" class="score-meter" max="100" value="0" aria-label="AI text signal score"></progress>
+              <div class="scale" aria-hidden="true"><span>Lower signal</span><span>Higher signal</span></div>
+            </div>
+            <p id="detector-note" class="small-text">AI screening starts at 50 words. Shorter drafts still get writing feedback.</p>
+            <details id="passages" class="passages" hidden>
+              <summary>Passage scores</summary>
+              <ol id="passage-list"></ol>
+            </details>
+          </section>
+          <section class="voice-section" aria-labelledby="voice-title">
+            <div class="section-label">
+              <h3 id="voice-title">Writing feedback</h3>
+            </div>
+            <p class="small-text" id="voice-placeholder">Look for stock phrases and long sentences you could simplify.</p>
+            <ul id="voice-notes" class="voice-notes" hidden></ul>
+          </section>
+        </div>
+      </section>
+    </div>
+
+    <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+    <p class="review-limit">The score reflects one English-language model’s estimate. Results can vary across detectors. <a href="https://huggingface.co/Deckard618/textdet" target="_blank" rel="noreferrer">Model details ↗</a></p>
+  </main>
+
+  <dialog id="guide" aria-labelledby="guide-title">
+    <div class="dialog-head">
+      <h2 id="guide-title">Voice guide</h2>
+      <form method="dialog"><button class="plain close-guide" type="submit" aria-label="Close voice guide">×</button></form>
+    </div>
+    <div class="dialog-main">
+      <p class="guide-summary" id="guide-summary">Loading your guide…</p>
+      <ul id="guide-traits" class="voice-notes"></ul>
+      <p class="small-text" id="guide-basis"></p>
+    </div>
+    <div class="dialog-footer">
+      <span class="small-text" id="guide-status" role="status"></span>
+      <button type="button" class="primary" id="copy-guide" disabled>Copy for ChatGPT <span aria-hidden="true">↗</span></button>
+    </div>
+  </dialog>
+</body>
+</html>
